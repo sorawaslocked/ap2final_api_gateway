@@ -22,6 +22,5 @@ type MovieUpdateData struct {
 	ReleaseYear      *uint16
 	RuntimeInMinutes *uint16
 	Genres           []string
-	UpdatedAt        time.Time
 	IsDeleted        *bool
 }
