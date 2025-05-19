@@ -9,7 +9,7 @@ import (
 
 type (
 	Config struct {
-		Client Client
+		Client Client `yaml:"client" env-required:"true"`
 	}
 
 	Client struct {

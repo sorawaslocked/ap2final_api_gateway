@@ -1,0 +1,6 @@
+httpServer:
+  address: ":8080"
+
+grpc:
+  client:
+    movieServiceURL: ":9999"
