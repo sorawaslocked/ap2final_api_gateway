@@ -4,6 +4,7 @@ go 1.23
 
 require (
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/sorawaslocked/ap2final_protos_gen v0.0.0-20250518115842-0f9aedc5e1e3
 	google.golang.org/grpc v1.72.1
 )
 

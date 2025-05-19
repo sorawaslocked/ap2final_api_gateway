@@ -10,5 +10,5 @@ type MoviePresenter interface {
 	GetByID(ctx context.Context, id string) (model.Movie, error)
 	GetAll(ctx context.Context) ([]model.Movie, error)
 	UpdateByID(ctx context.Context, id string, update model.MovieUpdateData) (model.Movie, error)
-	Delete(ctx context.Context, id string) (model.Movie, error)
+	DeleteByID(ctx context.Context, id string) (model.Movie, error)
 }
