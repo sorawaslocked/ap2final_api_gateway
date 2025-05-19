@@ -14,3 +14,14 @@ type Movie struct {
 	UpdatedAt        time.Time
 	IsDeleted        bool
 }
+
+type MovieUpdateData struct {
+	AgeRating        *string
+	PrimaryTitle     *string
+	OriginalTitle    *string
+	ReleaseYear      *uint16
+	RuntimeInMinutes *uint16
+	Genres           []string
+	UpdatedAt        time.Time
+	IsDeleted        *bool
+}
