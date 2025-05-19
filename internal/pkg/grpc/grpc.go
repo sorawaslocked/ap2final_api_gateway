@@ -14,9 +14,9 @@ type (
 
 	Client struct {
 		MovieServiceURL  string        `yaml:"movieServiceURL" env:"GRPC_MOVIE_SERVICE_URL" env-required:"true"`
-		MaxReceiveSizeMb uint8         `yaml:"maxReceiveSizeMb" env:"GRPC_MAX_RECEIVE_SIZE_MB" env-required:"false"`
-		TimeKeepAlive    time.Duration `yaml:"timeKeepAlive" env:"GRPC_TIME_KEEP_ALIVE" env-required:"false"`
-		Timeout          time.Duration `yaml:"timeout" env:"GRPC_TIMEOUT" env-required:"false"`
+		MaxReceiveSizeMb int           `yaml:"maxReceiveSizeMb" env:"GRPC_MAX_RECEIVE_SIZE_MB" env-default:"4"`
+		TimeKeepAlive    time.Duration `yaml:"timeKeepAlive" env:"GRPC_TIME_KEEP_ALIVE" env-default:"1m"`
+		Timeout          time.Duration `yaml:"timeout" env:"GRPC_TIMEOUT" env-default:"10s"`
 	}
 )
 
@@ -30,7 +30,7 @@ func Connect(target string, clientCfg Client) (*grpc.ClientConn, error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithKeepaliveParams(keepAliveParams),
-		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(int(clientCfg.MaxReceiveSizeMb))),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(clientCfg.MaxReceiveSizeMb)),
 	}
 
 	conn, err := grpc.NewClient(target, opts...)
