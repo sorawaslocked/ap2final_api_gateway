@@ -13,10 +13,10 @@ type (
 	}
 
 	Client struct {
-		MovieServiceURL  string        `yaml:"movieServiceURL" env-required:"true"`
-		MaxReceiveSizeMb uint8         `yaml:"maxReceiveSizeMb" env-required:"false"`
-		TimeKeepAlive    time.Duration `yaml:"timeKeepAlive" env-required:"false"`
-		Timeout          time.Duration `yaml:"timeout" env-required:"false"`
+		MovieServiceURL  string        `yaml:"movieServiceURL" env:"GRPC_MOVIE_SERVICE_URL" env-required:"true"`
+		MaxReceiveSizeMb uint8         `yaml:"maxReceiveSizeMb" env:"GRPC_MAX_RECEIVE_SIZE_MB" env-required:"false"`
+		TimeKeepAlive    time.Duration `yaml:"timeKeepAlive" env:"GRPC_TIME_KEEP_ALIVE" env-required:"false"`
+		Timeout          time.Duration `yaml:"timeout" env:"GRPC_TIMEOUT" env-required:"false"`
 	}
 )
 
