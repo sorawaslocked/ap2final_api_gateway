@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http/dto"
 	"log/slog"
 )
@@ -39,7 +38,7 @@ func (h *Movie) Create(ctx *gin.Context) {
 		return
 	}
 
-	http.Created(ctx, dto.ToMovie(newMovie))
+	Created(ctx, dto.ToMovie(newMovie))
 }
 
 func (h *Movie) Get(ctx *gin.Context) {
@@ -56,7 +55,7 @@ func (h *Movie) Get(ctx *gin.Context) {
 		return
 	}
 
-	http.Ok(ctx, dto.ToMovie(movie))
+	Ok(ctx, dto.ToMovie(movie))
 }
 
 func (h *Movie) GetAll(ctx *gin.Context) {
@@ -76,7 +75,7 @@ func (h *Movie) GetAll(ctx *gin.Context) {
 		movieDtos = append(movieDtos, dto.ToMovie(movie))
 	}
 
-	http.Ok(ctx, movieDtos)
+	Ok(ctx, movieDtos)
 }
 
 func (h *Movie) Update(ctx *gin.Context) {
@@ -99,7 +98,7 @@ func (h *Movie) Update(ctx *gin.Context) {
 		return
 	}
 
-	http.Ok(ctx, dto.ToMovie(movie))
+	Ok(ctx, dto.ToMovie(movie))
 }
 
 func (h *Movie) Delete(ctx *gin.Context) {
@@ -116,5 +115,5 @@ func (h *Movie) Delete(ctx *gin.Context) {
 		return
 	}
 
-	http.Ok(ctx, dto.ToMovie(movie))
+	Ok(ctx, dto.ToMovie(movie))
 }
