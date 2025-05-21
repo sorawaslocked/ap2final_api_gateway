@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/grpc"
 	httpserver "github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/config"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 const serviceName = "api-gateway"
@@ -69,5 +71,9 @@ func (a *App) Run() {
 
 func (a *App) Stop() {
 	a.log.Info("shutting down http server")
-	a.httpServer.Stop()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	a.httpServer.Stop(ctx)
 }

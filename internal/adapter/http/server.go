@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http/handler"
@@ -67,6 +68,8 @@ func (a *API) MustRun() {
 	}()
 }
 
-func (a *API) Stop() {
+func (a *API) Stop(ctx context.Context) {
 	a.log.Info("stopping http server")
+
+	<-ctx.Done()
 }
