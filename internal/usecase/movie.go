@@ -32,5 +32,5 @@ func (uc *MovieUseCase) UpdateByID(ctx context.Context, id string, update model.
 }
 
 func (uc *MovieUseCase) DeleteByID(ctx context.Context, id string) (model.Movie, error) {
-	return uc.DeleteByID(ctx, id)
+	return uc.presenter.DeleteByID(ctx, id)
 }
