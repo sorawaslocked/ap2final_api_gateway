@@ -1,0 +1,7 @@
+package http
+
+import "github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http/handler"
+
+type MovieUseCase interface {
+	handler.MovieUseCase
+}
