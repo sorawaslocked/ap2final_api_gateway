@@ -21,7 +21,7 @@ type App struct {
 	log        *slog.Logger
 }
 
-func New(cfg config.Config, log *slog.Logger) (*App, error) {
+func New(cfg *config.Config, log *slog.Logger) (*App, error) {
 	log.Info("starting service", slog.String("service", serviceName))
 
 	movieServiceGRPCConn, err := grpcconn.Connect(

@@ -11,6 +11,7 @@ type (
 	Config struct {
 		HTTPServer HTTPServer  `yaml:"httpServer" env-required:"true"`
 		GRPC       grpc.Config `yaml:"grpc" env-required:"true"`
+		Env        string      `yaml:"env" env-required:"true"`
 	}
 
 	HTTPServer struct {

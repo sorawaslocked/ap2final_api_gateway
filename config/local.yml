@@ -1,5 +1,8 @@
+env: "local"
+
 httpServer:
-  address: ":8080"
+  address: "localhost:8080"
+  ginMode: "release"
 
 grpc:
   client:

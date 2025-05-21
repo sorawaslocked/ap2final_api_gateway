@@ -36,6 +36,8 @@ func New(cfg config.HTTPServer, log *slog.Logger, movieUseCase MovieUseCase) *AP
 		movieHandler: movieHandler,
 	}
 
+	api.setupRoutes()
+
 	return api
 }
 
