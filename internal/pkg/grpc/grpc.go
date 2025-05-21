@@ -27,10 +27,12 @@ func Connect(target string, clientCfg Client) (*grpc.ClientConn, error) {
 		PermitWithoutStream: true,
 	}
 
+	maxReceiveSizeBytes := 1024 * 1024 * clientCfg.MaxReceiveSizeMb
+
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithKeepaliveParams(keepAliveParams),
-		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(clientCfg.MaxReceiveSizeMb)),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(maxReceiveSizeBytes)),
 	}
 
 	conn, err := grpc.NewClient(target, opts...)
