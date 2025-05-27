@@ -22,10 +22,10 @@ func (h *Movie) Create(ctx *gin.Context) {
 	const op = "handler.Movie.Create"
 	log := h.log.With("op", op)
 
-	movie, err := dto.FromCreateRequest(ctx)
+	movie, err := dto.FromCreateMovieRequest(ctx)
 	if err != nil {
+		logError(log, err)
 		handleError(ctx, err)
-		logError(h.log, err)
 
 		return
 	}
@@ -82,7 +82,7 @@ func (h *Movie) Update(ctx *gin.Context) {
 	const op = "handler.Movie.Update"
 	log := h.log.With("op", op)
 
-	id, update, err := dto.FromUpdateRequest(ctx)
+	id, update, err := dto.FromUpdateMovieRequest(ctx)
 	if err != nil {
 		handleError(ctx, err)
 		logError(log, err)

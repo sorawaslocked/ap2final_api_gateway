@@ -16,7 +16,7 @@ type Movie struct {
 	IsDeleted        bool     `json:"isDeleted"`
 }
 
-type CreateRequest struct {
+type CreateMovieRequest struct {
 	AgeRating        string   `json:"ageRating"`
 	PrimaryTitle     string   `json:"primaryTitle"`
 	OriginalTitle    string   `json:"originalTitle"`
@@ -25,7 +25,7 @@ type CreateRequest struct {
 	Genres           []string `json:"genres"`
 }
 
-type UpdateRequest struct {
+type UpdateMovieRequest struct {
 	AgeRating        *string  `json:"ageRating"`
 	PrimaryTitle     *string  `json:"primaryTitle"`
 	OriginalTitle    *string  `json:"originalTitle"`
@@ -35,8 +35,8 @@ type UpdateRequest struct {
 	IsDeleted        *bool    `json:"isDeleted"`
 }
 
-func FromCreateRequest(ctx *gin.Context) (model.Movie, error) {
-	var req CreateRequest
+func FromCreateMovieRequest(ctx *gin.Context) (model.Movie, error) {
+	var req CreateMovieRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		return model.Movie{}, ErrJSONBinding
@@ -52,10 +52,10 @@ func FromCreateRequest(ctx *gin.Context) (model.Movie, error) {
 	}, nil
 }
 
-func FromUpdateRequest(ctx *gin.Context) (string, model.MovieUpdateData, error) {
+func FromUpdateMovieRequest(ctx *gin.Context) (string, model.MovieUpdateData, error) {
 	id := ctx.Param("id")
 
-	var req UpdateRequest
+	var req UpdateMovieRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		return "", model.MovieUpdateData{}, ErrJSONBinding
