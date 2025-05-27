@@ -18,7 +18,7 @@ func NewMovie(client svc.MovieServiceClient) *Movie {
 }
 
 func (c *Movie) Create(ctx context.Context, movie model.Movie) (model.Movie, error) {
-	res, err := c.client.Create(ctx, dto.ToCreateRequest(movie))
+	res, err := c.client.Create(ctx, dto.ToCreateMovieRequest(movie))
 	if err != nil {
 		return model.Movie{}, wrapError(err)
 	}
@@ -29,7 +29,7 @@ func (c *Movie) Create(ctx context.Context, movie model.Movie) (model.Movie, err
 }
 
 func (c *Movie) GetByID(ctx context.Context, id string) (model.Movie, error) {
-	res, err := c.client.Get(ctx, dto.ToGetRequest(id))
+	res, err := c.client.Get(ctx, dto.ToGetMovieRequest(id))
 	if err != nil {
 		return model.Movie{}, wrapError(err)
 	}
@@ -55,7 +55,7 @@ func (c *Movie) GetAll(ctx context.Context) ([]model.Movie, error) {
 }
 
 func (c *Movie) UpdateByID(ctx context.Context, id string, update model.MovieUpdateData) (model.Movie, error) {
-	res, err := c.client.Update(ctx, dto.ToUpdateRequest(id, update))
+	res, err := c.client.Update(ctx, dto.ToUpdateMovieRequest(id, update))
 	if err != nil {
 		return model.Movie{}, wrapError(err)
 	}
@@ -66,7 +66,7 @@ func (c *Movie) UpdateByID(ctx context.Context, id string, update model.MovieUpd
 }
 
 func (c *Movie) DeleteByID(ctx context.Context, id string) (model.Movie, error) {
-	res, err := c.client.Delete(ctx, dto.ToDeleteRequest(id))
+	res, err := c.client.Delete(ctx, dto.ToDeleteMovieRequest(id))
 	if err != nil {
 		return model.Movie{}, wrapError(err)
 	}

@@ -21,7 +21,7 @@ func FromBaseMovie(res *base.Movie) model.Movie {
 	}
 }
 
-func ToCreateRequest(movie model.Movie) *svc.CreateRequest {
+func ToCreateMovieRequest(movie model.Movie) *svc.CreateRequest {
 	return &svc.CreateRequest{
 		AgeRating:        movie.AgeRating,
 		PrimaryTitle:     movie.PrimaryTitle,
@@ -32,13 +32,13 @@ func ToCreateRequest(movie model.Movie) *svc.CreateRequest {
 	}
 }
 
-func ToGetRequest(id string) *svc.GetRequest {
+func ToGetMovieRequest(id string) *svc.GetRequest {
 	return &svc.GetRequest{
 		ID: id,
 	}
 }
 
-func ToUpdateRequest(id string, update model.MovieUpdateData) *svc.UpdateRequest {
+func ToUpdateMovieRequest(id string, update model.MovieUpdateData) *svc.UpdateRequest {
 	var releaseYear, runtimeInMinutes *uint32
 
 	if update.ReleaseYear != nil {
@@ -63,7 +63,7 @@ func ToUpdateRequest(id string, update model.MovieUpdateData) *svc.UpdateRequest
 	}
 }
 
-func ToDeleteRequest(id string) *svc.DeleteRequest {
+func ToDeleteMovieRequest(id string) *svc.DeleteRequest {
 	return &svc.DeleteRequest{
 		ID: id,
 	}
