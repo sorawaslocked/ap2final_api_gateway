@@ -7,5 +7,5 @@ httpServer:
 grpc:
   client:
     movieServiceURL: ":9999"
-    actorServiceURL: "localhost:9997"
-    sessionServiceURL: "localhost:9998"
+    actorServiceURL: ":9997"
+    sessionServiceURL: ":9998"
