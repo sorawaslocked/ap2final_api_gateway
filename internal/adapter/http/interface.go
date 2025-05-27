@@ -9,3 +9,11 @@ type MovieUseCase interface {
 type UserUseCase interface {
 	handler.UserUseCase
 }
+
+type ActorUseCase interface {
+	handler.ActorUseCase
+}
+
+type SessionUseCase interface {
+	handler.SessionUseCase
+}

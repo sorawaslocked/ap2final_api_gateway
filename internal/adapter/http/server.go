@@ -11,12 +11,14 @@ import (
 )
 
 type API struct {
-	server       *gin.Engine
-	cfg          config.HTTPServer
-	log          *slog.Logger
-	addr         string
-	movieHandler *handler.Movie
-	userHandler  *handler.User
+	server         *gin.Engine
+	cfg            config.HTTPServer
+	log            *slog.Logger
+	addr           string
+	movieHandler   *handler.Movie
+	userHandler    *handler.User
+	actorHandler   *handler.Actor
+	sessionHandler *handler.Session
 }
 
 func New(
@@ -24,6 +26,8 @@ func New(
 	log *slog.Logger,
 	movieUseCase MovieUseCase,
 	userUseCase UserUseCase,
+	actorUseCase ActorUseCase,
+	sessionUseCase SessionUseCase,
 ) *API {
 	gin.SetMode(cfg.GinMode)
 
@@ -35,14 +39,18 @@ func New(
 	// Injecting presenters
 	movieHandler := handler.NewMovie(log, movieUseCase)
 	userHandler := handler.NewUser(log, userUseCase)
+	actorHandler := handler.NewActor(log, actorUseCase)
+	sessionHandler := handler.NewSession(log, sessionUseCase)
 
 	api := &API{
-		server:       server,
-		cfg:          cfg,
-		log:          log,
-		addr:         cfg.Address,
-		movieHandler: movieHandler,
-		userHandler:  userHandler,
+		server:         server,
+		cfg:            cfg,
+		log:            log,
+		addr:           cfg.Address,
+		movieHandler:   movieHandler,
+		userHandler:    userHandler,
+		actorHandler:   actorHandler,
+		sessionHandler: sessionHandler,
 	}
 
 	api.setupRoutes()
@@ -69,6 +77,31 @@ func (a *API) setupRoutes() {
 			users.GET("/:id", a.userHandler.Get)
 			users.PATCH("/:id", a.userHandler.Update)
 			users.DELETE("/:id", a.userHandler.Delete)
+		}
+		actors := v1.Group("/actors")
+		{
+			actors.POST("/", a.actorHandler.Create)
+			actors.GET("/:id", a.actorHandler.Get)
+			actors.GET("/", a.actorHandler.GetAll)
+			actors.GET("/filter", a.actorHandler.GetAllWithFilter)
+			actors.GET("/movie/:movieId", a.actorHandler.GetByMovieID)
+			actors.PATCH("/:id", a.actorHandler.Update)
+			actors.DELETE("/:id", a.actorHandler.Delete)
+		}
+		sessions := v1.Group("/sessions")
+		{
+			sessions.POST("/", a.sessionHandler.Create)
+			sessions.GET("/:id", a.sessionHandler.Get)
+			sessions.GET("/", a.sessionHandler.GetAll)
+			sessions.GET("/filter", a.sessionHandler.GetAllWithFilter)
+			sessions.GET("/movie/:movieId", a.sessionHandler.GetByMovieID)
+			sessions.GET("/cinema-hall/:cinemaHallId", a.sessionHandler.GetByCinemaHallID)
+			sessions.GET("/time-range", a.sessionHandler.GetByTimeRange)
+			sessions.GET("/available", a.sessionHandler.GetAvailableSessions)
+			sessions.PATCH("/:id", a.sessionHandler.Update)
+			sessions.PATCH("/:id/seats", a.sessionHandler.UpdateSeatAvailability)
+			sessions.PATCH("/:id/status", a.sessionHandler.ChangeStatus)
+			sessions.DELETE("/:id", a.sessionHandler.Delete)
 		}
 	}
 }

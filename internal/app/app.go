@@ -8,7 +8,9 @@ import (
 	grpcconn "github.com/sorawaslocked/ap2final_api_gateway/internal/pkg/grpc"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/usecase"
 	"github.com/sorawaslocked/ap2final_base/pkg/logger"
+	grpcActorSvc "github.com/sorawaslocked/ap2final_protos_gen/service/actor"
 	grpcMovieSvc "github.com/sorawaslocked/ap2final_protos_gen/service/movie"
+	grpcSessionSvc "github.com/sorawaslocked/ap2final_protos_gen/service/session"
 	grpcUserSvc "github.com/sorawaslocked/ap2final_protos_gen/service/user"
 	"log/slog"
 	"os"
@@ -53,16 +55,52 @@ func New(cfg *config.Config, log *slog.Logger) (*App, error) {
 		)
 	}
 
+	// Actor Service Connection
+	actorServiceGRPCConn, err := grpcconn.Connect(
+		cfg.GRPC.Client.ActorServiceURL,
+		cfg.GRPC.Client,
+	)
+	if err != nil {
+		log.Error(
+			"failed to connect to grpc service",
+			slog.String("service", "actor service"),
+			slog.String("url", cfg.GRPC.Client.ActorServiceURL),
+			logger.Err(err),
+		)
+	}
+
+	// Session Service Connection
+	sessionServiceGRPCConn, err := grpcconn.Connect(
+		cfg.GRPC.Client.SessionServiceURL,
+		cfg.GRPC.Client,
+	)
+	if err != nil {
+		log.Error(
+			"failed to connect to grpc service",
+			slog.String("service", "session service"),
+			slog.String("url", cfg.GRPC.Client.SessionServiceURL),
+			logger.Err(err),
+		)
+	}
+
 	movieServiceGRPCClient := grpcMovieSvc.NewMovieServiceClient(movieServiceGRPCConn)
 	movieServiceGRPCHandler := grpc.NewMovie(movieServiceGRPCClient)
 
 	userServiceGRPCClient := grpcUserSvc.NewUserServiceClient(userServiceGRPCConn)
 	userServiceGRPCHandler := grpc.NewUser(userServiceGRPCClient)
 
+	actorServiceGRPCClient := grpcActorSvc.NewActorServiceClient(actorServiceGRPCConn)
+	actorServiceGRPCHandler := grpc.NewActor(actorServiceGRPCClient)
+
+	sessionServiceGRPCClient := grpcSessionSvc.NewSessionServiceClient(sessionServiceGRPCConn)
+	sessionServiceGRPCHandler := grpc.NewSession(sessionServiceGRPCClient)
+
 	movieUseCase := usecase.NewMovie(movieServiceGRPCHandler)
 	userUseCase := usecase.NewUser(userServiceGRPCHandler)
+	actorUseCase := usecase.NewActor(actorServiceGRPCHandler)
+	sessionUseCase := usecase.NewSession(sessionServiceGRPCHandler)
 
-	httpServer := httpserver.New(cfg.HTTPServer, log, movieUseCase, userUseCase)
+	httpServer := httpserver.New(cfg.HTTPServer, log, movieUseCase, userUseCase, actorUseCase, sessionUseCase)
 
 	app := &App{
 		httpServer: httpServer,
