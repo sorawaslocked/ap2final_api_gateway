@@ -8,7 +8,8 @@ import (
 	grpcconn "github.com/sorawaslocked/ap2final_api_gateway/internal/pkg/grpc"
 	"github.com/sorawaslocked/ap2final_api_gateway/internal/usecase"
 	"github.com/sorawaslocked/ap2final_base/pkg/logger"
-	grpcSvc "github.com/sorawaslocked/ap2final_protos_gen/service/movie"
+	grpcMovieSvc "github.com/sorawaslocked/ap2final_protos_gen/service/movie"
+	grpcUserSvc "github.com/sorawaslocked/ap2final_protos_gen/service/user"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -39,12 +40,29 @@ func New(cfg *config.Config, log *slog.Logger) (*App, error) {
 		)
 	}
 
-	movieServiceGRPCClient := grpcSvc.NewMovieServiceClient(movieServiceGRPCConn)
+	userServiceGRPCConn, err := grpcconn.Connect(
+		cfg.GRPC.Client.UserServiceURL,
+		cfg.GRPC.Client,
+	)
+	if err != nil {
+		log.Error(
+			"failed to connect to grpc service",
+			slog.String("service", "user service"),
+			slog.String("url", cfg.GRPC.Client.UserServiceURL),
+			logger.Err(err),
+		)
+	}
+
+	movieServiceGRPCClient := grpcMovieSvc.NewMovieServiceClient(movieServiceGRPCConn)
 	movieServiceGRPCHandler := grpc.NewMovie(movieServiceGRPCClient)
 
-	movieUseCase := usecase.NewMovie(movieServiceGRPCHandler)
+	userServiceGRPCClient := grpcUserSvc.NewUserServiceClient(userServiceGRPCConn)
+	userServiceGRPCHandler := grpc.NewUser(userServiceGRPCClient)
 
-	httpServer := httpserver.New(cfg.HTTPServer, log, movieUseCase)
+	movieUseCase := usecase.NewMovie(movieServiceGRPCHandler)
+	userUseCase := usecase.NewUser(userServiceGRPCHandler)
+
+	httpServer := httpserver.New(cfg.HTTPServer, log, movieUseCase, userUseCase)
 
 	app := &App{
 		httpServer: httpServer,

@@ -13,6 +13,7 @@ type (
 	}
 
 	Client struct {
+		UserServiceURL   string        `yaml:"userServiceURL" env-required:"true"`
 		MovieServiceURL  string        `yaml:"movieServiceURL" env:"GRPC_MOVIE_SERVICE_URL" env-required:"true"`
 		MaxReceiveSizeMb int           `yaml:"maxReceiveSizeMb" env:"GRPC_MAX_RECEIVE_SIZE_MB" env-default:"4"`
 		TimeKeepAlive    time.Duration `yaml:"timeKeepAlive" env:"GRPC_TIME_KEEP_ALIVE" env-default:"1m"`

@@ -5,3 +5,7 @@ import "github.com/sorawaslocked/ap2final_api_gateway/internal/adapter/http/hand
 type MovieUseCase interface {
 	handler.MovieUseCase
 }
+
+type UserUseCase interface {
+	handler.UserUseCase
+}

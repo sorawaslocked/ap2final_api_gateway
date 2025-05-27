@@ -16,9 +16,15 @@ type API struct {
 	log          *slog.Logger
 	addr         string
 	movieHandler *handler.Movie
+	userHandler  *handler.User
 }
 
-func New(cfg config.HTTPServer, log *slog.Logger, movieUseCase MovieUseCase) *API {
+func New(
+	cfg config.HTTPServer,
+	log *slog.Logger,
+	movieUseCase MovieUseCase,
+	userUseCase UserUseCase,
+) *API {
 	gin.SetMode(cfg.GinMode)
 
 	server := gin.New()
@@ -28,6 +34,7 @@ func New(cfg config.HTTPServer, log *slog.Logger, movieUseCase MovieUseCase) *AP
 
 	// Injecting presenters
 	movieHandler := handler.NewMovie(log, movieUseCase)
+	userHandler := handler.NewUser(log, userUseCase)
 
 	api := &API{
 		server:       server,
@@ -35,6 +42,7 @@ func New(cfg config.HTTPServer, log *slog.Logger, movieUseCase MovieUseCase) *AP
 		log:          log,
 		addr:         cfg.Address,
 		movieHandler: movieHandler,
+		userHandler:  userHandler,
 	}
 
 	api.setupRoutes()
@@ -52,6 +60,15 @@ func (a *API) setupRoutes() {
 			movies.GET("/", a.movieHandler.GetAll)
 			movies.PATCH("/:id", a.movieHandler.Update)
 			movies.DELETE("/:id", a.movieHandler.Delete)
+		}
+		users := v1.Group("/users")
+		{
+			users.POST("/register", a.userHandler.Register)
+			users.POST("/login", a.userHandler.Login)
+			users.POST("/refreshToken", a.userHandler.RefreshToken)
+			users.GET("/:id", a.userHandler.Get)
+			users.PATCH("/:id", a.userHandler.Update)
+			users.DELETE("/:id", a.userHandler.Delete)
 		}
 	}
 }
